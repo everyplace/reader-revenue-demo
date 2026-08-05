@@ -1,6 +1,6 @@
 <script async preferred-sources-control="manual" type="application/javascript" src="{{env.SWG_JS_PUBLISHER_URL}}"></script>
 
-# Preferred Sources: Implement with JS (IIFE)
+# Preferred Sources: Implement with JS
 
 When you need programmatic control over runtime settings (such as dark theme formatting or multi-language localization), or wish to manually trigger the Preferred Source flow from a custom user interface, you can integrate via JavaScript using traditional IIFE callback queues.
 

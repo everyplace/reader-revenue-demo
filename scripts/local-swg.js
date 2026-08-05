@@ -52,17 +52,29 @@ variants.forEach(variant => {
   }
 });
 
-console.log('Creating symbolic link for assets...');
+console.log('Creating symbolic links for assets...');
 const publicAssetsDir = path.resolve(demoRoot, 'public/assets');
 const srcAssetsPath = path.resolve(swgJsRoot, 'assets');
 
-if (fs.existsSync(publicAssetsDir)) {
-  fs.unlinkSync(publicAssetsDir);
+if (!fs.existsSync(publicAssetsDir)) {
+  fs.mkdirSync(publicAssetsDir, { recursive: true });
 }
 
 try {
-  fs.symlinkSync(srcAssetsPath, publicAssetsDir);
-  console.log(`  Linked Assets: public/assets -> swg-js/assets`);
+  const assetItems = fs.readdirSync(srcAssetsPath);
+  assetItems.forEach(item => {
+    const srcItem = path.resolve(srcAssetsPath, item);
+    const destItem = path.resolve(publicAssetsDir, item);
+    try {
+      if (fs.lstatSync(destItem)) {
+        fs.unlinkSync(destItem);
+      }
+    } catch (e) {
+      // File doesn't exist, ignore
+    }
+    fs.symlinkSync(srcItem, destItem);
+    console.log(`  Linked Asset: public/assets/${item} -> swg-js/assets/${item}`);
+  });
 } catch (e) {
   console.error(`  Failed to link assets: ${e.message}`);
 }

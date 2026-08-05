@@ -12,6 +12,7 @@ public/js/swg-basic-local.js
 public/js/swg-basic-local.mjs
 public/js/publisher-local.js
 public/js/publisher-local.mjs
+public/js/swg.js
 public/assets/i18n
 public/assets/loader.svg
 public/assets/swg-button.css

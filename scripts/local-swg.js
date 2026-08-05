@@ -56,6 +56,14 @@ console.log('Creating symbolic links for assets...');
 const publicAssetsDir = path.resolve(demoRoot, 'public/assets');
 const srcAssetsPath = path.resolve(swgJsRoot, 'assets');
 
+try {
+  if (fs.lstatSync(publicAssetsDir).isSymbolicLink()) {
+    fs.unlinkSync(publicAssetsDir);
+  }
+} catch (e) {
+  // Ignore if doesn't exist
+}
+
 if (!fs.existsSync(publicAssetsDir)) {
   fs.mkdirSync(publicAssetsDir, { recursive: true });
 }
@@ -87,16 +95,12 @@ if (fs.existsSync(envPath)) {
 }
 
 if (!envContent.includes('SWG_OVERRIDE=local')) {
-  if (envContent && !envContent.endsWith('
-')) envContent += '
-';
-  envContent += 'SWG_OVERRIDE=local
-';
+  if (envContent && !envContent.endsWith('\n')) envContent += '\n';
+  envContent += 'SWG_OVERRIDE=local\n';
 }
 
 if (!envContent.includes('ENV_OVERRIDES=')) {
-  envContent += 'ENV_OVERRIDES=SWG_OVERRIDE
-';
+  envContent += 'ENV_OVERRIDES=SWG_OVERRIDE\n';
 } else if (!envContent.includes('SWG_OVERRIDE')) {
   envContent = envContent.replace(/ENV_OVERRIDES=(.*)/, 'ENV_OVERRIDES=$1,SWG_OVERRIDE');
 }

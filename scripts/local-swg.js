@@ -16,11 +16,14 @@ console.log(`Found swg-js at ${swgJsRoot}`);
 
 console.log('Building swg-js...');
 execSync('npm run build', { cwd: swgJsRoot, stdio: 'inherit' });
+execSync('npx vite build -- --target=publisher --esm', { cwd: swgJsRoot, stdio: 'inherit' });
 
 const variants = [
   { src: 'subscriptions.max.js', dest: 'swg-local.js' },
   { src: 'subscriptions-gaa.max.js', dest: 'swg-gaa-local.js' },
-  { src: 'basic-subscriptions.max.js', dest: 'swg-basic-local.js' }
+  { src: 'basic-subscriptions.max.js', dest: 'swg-basic-local.js' },
+  { src: 'publisher.max.js', dest: 'publisher-local.js' },
+  { src: 'publisher.mjs', dest: 'publisher-local.mjs' }
 ];
 
 console.log('Creating symbolic links for JS...');
@@ -33,8 +36,12 @@ variants.forEach(variant => {
   const srcPath = path.resolve(swgJsRoot, 'dist', variant.src);
   const destPath = path.resolve(publicJsDir, variant.dest);
   
-  if (fs.existsSync(destPath)) {
-    fs.unlinkSync(destPath);
+  try {
+    if (fs.lstatSync(destPath)) {
+      fs.unlinkSync(destPath);
+    }
+  } catch (e) {
+    // File doesn't exist, ignore
   }
   
   try {

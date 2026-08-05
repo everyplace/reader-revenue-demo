@@ -80,46 +80,27 @@ templated methods.
 
 ### Local swg-js development
 
-You can run this demo using a local copy of the `swg-js` library. This is useful
-for testing changes to the library before they are published.
+You can test this demo application against custom or locally compiled `swg-js` binaries by leveraging environment variable URL overrides without creating filesystem symlinks across project boundaries.
 
-#### 1. Setup local links
+#### 1. Serve your local swg-js build
+Start a local static HTTP server (with CORS headers enabled for ES Modules) inside your `swg-js` build output directory on a dedicated port (for example, `http://localhost:8000`).
 
-The project includes a script to automate building a local `swg-js` repository
-and linking its output into this demo.
-
+#### 2. Configure environment overrides
+In your `.env` file (or directly in your terminal execution environment), override the target script URLs:
 ```shell
-# Assuming swg-js is in a sibling directory
-npm run local-swg
+SWG_PUBLISHER_URL=http://localhost:8000/dist/publisher.js
+SWG_PUBLISHER_MJS_URL=http://localhost:8000/dist/publisher.mjs
 ```
-
-Alternatively, you can provide a custom path to the `swg-js` repository:
-```shell
-npm run local-swg -- ../path/to/swg-js
-```
-
-#### 2. Configure environment
-
-The `local-swg` script automatically updates your `.env` file to include:
-```shell
-SWG_OVERRIDE=local
-ENV_OVERRIDES=SWG_OVERRIDE
-```
-
-- `SWG_OVERRIDE=local`: Tells the renderer to use local `/js/swg-local.js` instead of the production CDN.
-- `ENV_OVERRIDES`: Enables overriding environment variables via query parameters (e.g., `?swg-override=production` to switch back temporarily).
+You can similarly override `SWG_URL`, `SWG_GAA_URL`, and `SWG_BASIC_URL` as needed for other library bundles.
 
 #### 3. Run the demo
-
-Once linked and configured, start the demo server as usual:
+Start the demo server as usual:
 
 ```shell
 npm run local
 ```
 
-The demo will now serve `swg.js` (and its variants) and library assets (CSS/SVG)
-directly from your local `swg-js` checkout. Any changes you make and rebuild in 
-`swg-js` will be reflected in the demo.
+The application will dynamically resolve and serve your custom endpoints across all interactive demo pages!
 
 ### Sample Env File
 

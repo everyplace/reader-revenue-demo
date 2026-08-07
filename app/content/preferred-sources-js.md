@@ -18,7 +18,6 @@ This demo uses `preferred-sources-control="manual"` to suppress automatic DOM sc
 1. Include `publisher.js` with the `preferred-sources-control="manual"` attribute.
 2. Push an initialization callback onto the global `self.PREFERRED_SOURCE` queue.
 3. Call `preferredSource.init(options)` with your configuration options and bind custom buttons via `.onclick = () => { preferredSource.addPreferredSource(); }`.
-4. Register event callbacks directly on `preferredSource` using clean `async` / `await` syntax.
 
 ```html
 <script async preferred-sources-control="manual" src="{{env.SWG_JS_PUBLISHER_URL}}"></script>
@@ -32,23 +31,6 @@ This demo uses `preferred-sources-control="manual"` to suppress automatic DOM sc
     triggerBtn.onclick = () => {
       preferredSource.addPreferredSource();
     };
-
-    // 3. Track button clicks
-    preferredSource.setOnAddPreferredSourceClick(() => {
-      console.log('The user clicked the Add Preferred Source button.');
-    });
-
-    // 4. Register an async callback to handle final user consent responses
-    preferredSource.setOnAddPreferredSourceResponse(async (responsePromise) => {
-      const response = await responsePromise;
-      if (response.actionCompleted) {
-        console.log('Successfully added as preferred source!');
-      } else if (response.alreadyCompleted) {
-        console.log('Already a preferred source.');
-      } else if (response.ineligible) {
-        console.log('Source is ineligible.');
-      }
-    });
   });
 </script>
 ```

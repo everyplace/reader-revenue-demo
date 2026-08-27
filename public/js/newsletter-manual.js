@@ -22,7 +22,7 @@ import {
   createButtonsForCtas,
   registerEventManager,
   parseCtaConfigurations,
-} from './cta-methods.js';
+} from '/js/cta-methods.js';
 
 const ctaConfigurationType = 'TYPE_NEWSLETTER_SIGNUP'
 const ctaConfigurations = parseCtaConfigurations(ctaConfigurationType);

@@ -80,18 +80,38 @@ templated methods.
 
 ### Local swg-js development
 
-You can test this demo application against custom or locally compiled `swg-js` binaries by leveraging environment variable URL overrides without creating filesystem symlinks across project boundaries.
+You can test this demo application against custom or locally compiled `swg-js` binaries by leveraging environment variable URL overrides.
 
-#### 1. Serve your local swg-js build
-Start a local static HTTP server (with CORS headers enabled for ES Modules) inside your `swg-js` build output directory on a dedicated port (for example, `http://localhost:8000`).
+#### 1. Run the swg-js development server in parallel
+In your local `swg-js` repository clone, start the local development server:
+```shell
+npm start # runs gulp watch and serve, exposing built artifacts at http://localhost:8000
+```
 
 #### 2. Configure environment overrides
-In your `.env` file (or directly in your terminal execution environment), override the target script URLs:
+In your `.env` file (or directly in your terminal execution environment), point the bundle URLs to your local `swg-js` server:
 ```shell
+# SwG standard bundles (IIFE & ESM)
+SWG_URL=http://localhost:8000/dist/subscriptions.max.js
+SWG_MJS_URL=http://localhost:8000/dist/subscriptions.mjs
+
+# Basic Subscriptions bundles (IIFE & ESM)
+SWG_BASIC_URL=http://localhost:8000/dist/basic-subscriptions.max.js
+SWG_BASIC_MJS_URL=http://localhost:8000/dist/basic-subscriptions.mjs
+
+# Extended Access / GAA bundles (IIFE & ESM)
+SWG_GAA_URL=http://localhost:8000/dist/subscriptions-gaa.max.js
+SWG_GAA_MJS_URL=http://localhost:8000/dist/subscriptions-gaa.mjs
+
+# Preferred Sources / Publisher bundles (IIFE & ESM)
 SWG_PUBLISHER_URL=http://localhost:8000/dist/publisher.js
 SWG_PUBLISHER_MJS_URL=http://localhost:8000/dist/publisher.mjs
 ```
-You can similarly override `SWG_URL`, `SWG_GAA_URL`, and `SWG_BASIC_URL` as needed for other library bundles.
+
+You can also use `SWG_OVERRIDE` to target remote staging environments like `autopush` or `qual`:
+```shell
+SWG_OVERRIDE=autopush # loads https://news.google.com/swg/js/v1/swg-autopush.js / .mjs
+```
 
 #### 3. Run the demo
 Start the demo server as usual:
@@ -138,6 +158,17 @@ SWG_SKU=SWGPD.1234
 OTHER_SKU1=SWGPD.7396-1992-3713-93389
 OTHER_SKU2=SWGPD.3391-5185-7663-76625
 OTHER_SKU3=SWGPD.1622-6200-3088-81282
+
+# Optional: SwG bundle URL overrides for local development or staging
+# SWG_URL=http://localhost:8000/dist/subscriptions.max.js
+# SWG_MJS_URL=http://localhost:8000/dist/subscriptions.mjs
+# SWG_BASIC_URL=http://localhost:8000/dist/basic-subscriptions.max.js
+# SWG_BASIC_MJS_URL=http://localhost:8000/dist/basic-subscriptions.mjs
+# SWG_GAA_URL=http://localhost:8000/dist/subscriptions-gaa.max.js
+# SWG_GAA_MJS_URL=http://localhost:8000/dist/subscriptions-gaa.mjs
+# SWG_PUBLISHER_URL=http://localhost:8000/dist/publisher.js
+# SWG_PUBLISHER_MJS_URL=http://localhost:8000/dist/publisher.mjs
+# SWG_OVERRIDE=autopush
 
 # Google Analytics
 GTAG_PROPERTY_ID=G-12345ABCDE

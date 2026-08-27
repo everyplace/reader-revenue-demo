@@ -32,10 +32,12 @@ img.get('/*', async (req, res)=>{
 
 js.get('/*', async (req, res)=>{
   try {
-    console.log(req.path);
-    const renderedStaticFile = await renderStaticFile(`public/js/${req.path}`);
-    res.set('Content-Type','text/javascript').end(renderedStaticFile);
+    const filePath = `public/js/${req.path}`;
+    const renderedStaticFile = await renderStaticFile(filePath);
+    const contentType = req.path.endsWith('.mjs') ? 'application/javascript' : 'text/javascript';
+    res.set('Content-Type', contentType).end(renderedStaticFile);
   } catch(e) {
+    console.error(`Error: failed to render ${req.path}`, e);
     res.status(500).end(`Error: failed to render ${req.path}`);
   }
 })
@@ -45,6 +47,7 @@ css.get('/*', async (req, res)=>{
     const renderedStaticFile = await renderStaticFile(`public/css/${req.path}`);
     res.set('Content-Type','text/css').end(renderedStaticFile);
   } catch(e) {
+    console.error(`Error: failed to render ${req.path}`, e);
     res.status(500).end(`Error: failed to render ${req.path}`);
   }
 })
